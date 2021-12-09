@@ -16,5 +16,7 @@ namespace IServices
         Task<ApiResult<object>> AddUser(UserDto user);
 
         Task<bool> DeleteUser(int id);
+
+        Task<ApiResult<object>> Login(LoginDto account);
     }
 }

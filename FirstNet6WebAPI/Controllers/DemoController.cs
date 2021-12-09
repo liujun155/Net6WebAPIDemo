@@ -1,5 +1,6 @@
 ﻿using Common;
 using IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
@@ -29,7 +30,7 @@ namespace FirstNet6WebAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         //[HttpGet("getdata")]
-        [Route("getdata"), HttpGet]
+        [Route("getdata/{id}"), HttpGet]
         [HttpGet]
         public string GetData(string id)
         {
@@ -43,7 +44,7 @@ namespace FirstNet6WebAPI.Controllers
         [Route("getdata1"), HttpGet]
         public string GetData1()
         {
-            return "Hello World";
+            return "Hello World 小红红";
         }
 
         /// <summary>
@@ -106,6 +107,7 @@ namespace FirstNet6WebAPI.Controllers
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
+        [Authorize(Roles = "Admin")]
         [HttpPost("AddUser")]
         public async Task<IActionResult> AddUser(UserDto user)
         {

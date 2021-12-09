@@ -1,8 +1,8 @@
 ﻿/**************************************************************
  * 命名空间：Models.Dtos
- * 类名称：UserDto
- * 文件名：UserDto
- * 创建时间：2021/12/7 16:22:42
+ * 类名称：LoginDto
+ * 文件名：LoginDto
+ * 创建时间：2021/12/8 17:45:12
  * 创建人：LiuJun
  * 创建说明：
  ***************************************************************
@@ -13,19 +13,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Models
 {
     /// <summary>
-    /// 用户Dto
+    /// 登录用户DTO
     /// </summary>
-    public class UserDto
+    public class LoginDto
     {
-        public string Name { get; set; }
-
         public string Account { get; set; }
 
         public string Password { get; set; }

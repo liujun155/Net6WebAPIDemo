@@ -11,6 +11,7 @@
  * 修改说明：
 ***************************************************************/
 
+using AutoMapper;
 using Common;
 using IServices;
 using Models;
@@ -27,6 +28,13 @@ namespace Services
     /// </summary>
     public class UserServices : Repository<User>, IUserServices
     {
+        private readonly IMapper _mapper;
+
+        public UserServices(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         public async Task<List<User>> GetUsers()
         {
             //var users = DbScoped.Sugar.Queryable<User>().ToList();
@@ -43,8 +51,10 @@ namespace Services
 
         public async Task<ApiResult<object>> AddUser(UserDto user)
         {
-            if (user == null || string.IsNullOrEmpty(user.Name)) return new ApiResult<object>(0, "参数错误", user);
-            User model = new User() { Name = user.Name };
+            if (user == null || string.IsNullOrEmpty(user.Name) || string.IsNullOrWhiteSpace(user.Name)) return new ApiResult<object>(0, "参数错误", user);
+            user.Name = user.Name.Trim();
+            User model = _mapper.Map<User>(user);
+            model.Password = Common.Helper.MD5Helper.MD5Encrypt32(model.Password);
             var isAny = await this.IsAnyAsync(x => x.Name == user.Name);
             if (isAny) return new ApiResult<object>(0, "名称重复", user);
             var isSuccess = await this.InsertAsync(model);
@@ -54,6 +64,17 @@ namespace Services
         public async Task<bool> DeleteUser(int id)
         {
             return await this.DeleteByIdAsync(id);
+        }
+
+        public async Task<ApiResult<object>> Login(LoginDto user)
+        {
+            var usr = await this.GetSingleAsync(x => x.Account == user.Account);
+            if(usr == null)
+                return new ApiResult<object>(false, "用户不存在");
+            if (usr.Password == Common.Helper.MD5Helper.MD5Encrypt32(user.Password))
+                return new ApiResult<object>(0, "成功", usr);
+            else
+                return new ApiResult<object>(false, "密码错误");
         }
     }
 }

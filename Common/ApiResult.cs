@@ -35,17 +35,17 @@ namespace Common
             this.Data = data;
         }
 
-        public ApiResult(bool isSuccess)
+        public ApiResult(bool isSuccess, string msg = "")
         {
             if(isSuccess)
             {
                 Code = 0;
-                Msg = "成功";
+                Msg = msg == "" ? "成功" : msg;
             }
             else
             {
                 Code = 1;
-                Msg = "失败";
+                Msg = msg == "" ? "失败" : msg;
             }
         }
     }
