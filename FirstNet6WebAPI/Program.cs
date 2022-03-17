@@ -99,7 +99,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                         OnChallenge = context =>
                         {
                             //此处代码为终止.Net Core默认的返回类型和数据结果，这个很重要哦，必须
-                            context.HandleResponse();
+                            //context.HandleResponse();
 
                             //自定义自己想要返回的数据结果，我这里要返回的是Json对象，通过引用Newtonsoft.Json库进行转换
 
@@ -107,9 +107,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                             //context.Response.ContentType = "text/plain";
                             ////自定义返回状态码，默认为401 我这里改成 200
                             ////context.Response.StatusCode = StatusCodes.Status200OK;
-                            //context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                            ////输出Json数据结果
-                            //context.Response.WriteAsync("expired");
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            //输出Json数据结果
+                            context.Response.WriteAsync("expired");
                             return Task.FromResult(0);
                         },
                         //403
@@ -118,9 +118,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                             //context.Response.ContentType = "text/plain";
                             ////自定义返回状态码，默认为401 我这里改成 200
                             ////context.Response.StatusCode = StatusCodes.Status200OK;
-                            //context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                            ////输出Json数据结果
-                            //context.Response.WriteAsync("expired");
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            //输出Json数据结果
+                            context.Response.WriteAsync("expired");
                             return Task.FromResult(0);
                         }
 

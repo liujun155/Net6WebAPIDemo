@@ -84,6 +84,7 @@ namespace FirstNet6WebAPI.Controllers
         /// 获取所有用户
         /// </summary>
         /// <returns></returns>
+        [Authorize(Roles = "Admin")]
         [HttpGet("GetAllUser")]
         public async Task<IActionResult> GetAllUsers()
         {
