@@ -29,7 +29,7 @@ namespace Common.AuthHelper
         /// </summary>
         /// <param name="UserInfo"></param>
         /// <returns></returns>
-        public static string CreateToken(JwtToken info)
+        public static string CreateToken(TokenModelJwt info)
         {
             var claims = new List<Claim>()
             {
@@ -37,10 +37,6 @@ namespace Common.AuthHelper
                 new Claim("UserId",info.UserId)
             };
             //赋予角色
-            //foreach (var role in info.RoleList)
-            //{
-            //    claims.Add(new Claim(ClaimTypes.Role, role));
-            //}
             claims.AddRange(info.RoleList.Select(s => new Claim(ClaimTypes.Role, s)));
             var secret = ConfigInfo.JwtSecret;
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
@@ -49,7 +45,7 @@ namespace Common.AuthHelper
                 issuer: ConfigInfo.Issuer,
                 audience: ConfigInfo.Audience,
                 claims: claims,
-                expires: DateTime.Now.AddSeconds(20), //20分钟有效期
+                expires: DateTime.Now.AddMinutes(20), //20分钟有效期
                 signingCredentials: credentials);
             var tokenStr = new JwtSecurityTokenHandler().WriteToken(token);
             return tokenStr;
@@ -62,7 +58,7 @@ namespace Common.AuthHelper
         /// </summary>
         /// <param name="UserInfo"></param>
         /// <returns></returns>
-        public static string CreateRToken(JwtToken info)
+        public static string CreateRToken(TokenModelJwt info)
         {
             var claims = new List<Claim>()
             {
@@ -70,10 +66,6 @@ namespace Common.AuthHelper
                 new Claim("UserId",info.UserId)
             };
             //赋予角色
-            //foreach (var role in info.RoleList)
-            //{
-            //    claims.Add(new Claim(ClaimTypes.Role, role));
-            //}
             claims.AddRange(info.RoleList.Select(s => new Claim(ClaimTypes.Role, s)));
             var secret = ConfigInfo.JwtRSecret;
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
@@ -91,9 +83,9 @@ namespace Common.AuthHelper
         /// 解析token
         /// </summary>
         /// <returns></returns>
-        public static JwtToken GetTokenValue(string token)
+        public static TokenModelJwt GetTokenValue(string token)
         {
-            var tokenJwt = new JwtToken();
+            var tokenJwt = new TokenModelJwt();
             var validateParameter = new TokenValidationParameters()
             {
                 ValidateLifetime = true,
@@ -109,7 +101,7 @@ namespace Common.AuthHelper
                 //校验并解析token
                 var claimsPrincipal = new JwtSecurityTokenHandler().ValidateToken(token, validateParameter, out SecurityToken validatedToken);//validatedToken:解密后的对象
                 var jwtPayload = ((JwtSecurityToken)validatedToken).Payload.SerializeToJson(); //获取payload中的数据 
-                tokenJwt = JsonConvert.DeserializeObject<JwtToken>(jwtPayload);
+                tokenJwt = JsonConvert.DeserializeObject<TokenModelJwt>(jwtPayload);
             }
             catch (SecurityTokenExpiredException)
             {
@@ -130,9 +122,9 @@ namespace Common.AuthHelper
         /// 解析Rtoken
         /// </summary>
         /// <returns></returns>
-        public static JwtToken GetRTokenValue(string token)
+        public static TokenModelJwt GetRTokenValue(string token)
         {
-            var tokenJwt = new JwtToken();
+            var tokenJwt = new TokenModelJwt();
             var validateParameter = new TokenValidationParameters()
             {
                 ValidateLifetime = true,
@@ -148,7 +140,7 @@ namespace Common.AuthHelper
                 //校验并解析token
                 var claimsPrincipal = new JwtSecurityTokenHandler().ValidateToken(token, validateParameter, out SecurityToken validatedToken);//validatedToken:解密后的对象
                 var jwtPayload = ((JwtSecurityToken)validatedToken).Payload.SerializeToJson(); //获取payload中的数据 
-                tokenJwt = JsonConvert.DeserializeObject<JwtToken>(jwtPayload);
+                tokenJwt = JsonConvert.DeserializeObject<TokenModelJwt>(jwtPayload);
             }
             catch (SecurityTokenExpiredException)
             {

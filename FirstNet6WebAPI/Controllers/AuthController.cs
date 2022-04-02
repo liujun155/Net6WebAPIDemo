@@ -33,7 +33,7 @@ namespace FirstNet6WebAPI.Controllers
             var userModel = result.Data as User;
             if (userModel == null) return new JsonResult(new ApiResult<object>(false));
             var roleList = await _userRoleServices.GetRolesByUserIdAsync(userModel.Id);
-            var jwt = new JwtToken()
+            var jwt = new TokenModelJwt()
             {
                 UserName = userModel.Name,
                 UserId = userModel.Id.ToString(),
@@ -41,13 +41,13 @@ namespace FirstNet6WebAPI.Controllers
             };
             var token = JwtHelper.CreateToken(jwt);
             var Rtoken = JwtHelper.CreateRToken(jwt);
-            result.Data = token;
-
-            return new JsonResult(new
+            result.Data = new
             {
                 token = token,
                 rtoken = Rtoken
-            });
+            };
+
+            return new JsonResult(result);
         }
     }
 }

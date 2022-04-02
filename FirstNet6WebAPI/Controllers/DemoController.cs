@@ -54,6 +54,7 @@ namespace FirstNet6WebAPI.Controllers
         [HttpGet("GetDate")]
         public IActionResult GetDate()
         {
+            Common.Helper.LogUtil.Info("测试日志");
             var date = new
             {
                 time = DateTime.Now,

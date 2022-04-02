@@ -2,6 +2,9 @@ using AutoMapper;
 using Common;
 using FirstNet6WebAPI;
 using IServices;
+using log4net;
+using log4net.Config;
+using log4net.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -17,6 +20,10 @@ ConfigInfo.JwtSecret = builder.Configuration.GetValue<string>("Jwt:Secret");
 ConfigInfo.JwtRSecret = builder.Configuration.GetValue<string>("Jwt:RSecret");
 ConfigInfo.Issuer = builder.Configuration.GetValue<string>("Jwt:Issuer");
 ConfigInfo.Audience = builder.Configuration.GetValue<string>("Jwt:Audience");
+
+ILoggerRepository repository = LogManager.CreateRepository("LogRepository");
+XmlConfigurator.Configure(repository, new FileInfo("Config/log4net.config"));
+
 // Add services to the container.
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
@@ -44,7 +51,7 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 
-    // using System.Reflection;
+    //生成注释
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
     #region 配置jwt
@@ -73,11 +80,12 @@ builder.Services.AddSwaggerGen(options =>
     #endregion
 });
 
-//添加接口依赖注入
+//添加接口依赖注入IOC
 builder.Services.AddSingleton<IUserServices, UserServices>();
 builder.Services.AddSingleton<IRoleServices, RoleServices>();
 builder.Services.AddSingleton<IUserRoleServices, UserRoleServices>();
 
+//身份认证
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {

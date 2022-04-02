@@ -17,7 +17,7 @@ using System.Text;
 
 namespace Common.AuthHelper
 {
-    public class JwtToken
+    public class TokenModelJwt
     {
         public string UserName { get; set; }
         public string UserId { get; set; }

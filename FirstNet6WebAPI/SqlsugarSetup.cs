@@ -13,7 +13,7 @@ namespace FirstNet6WebAPI
         {
             SqlSugarScope sqlSugar = new SqlSugarScope(new ConnectionConfig()
             {
-                DbType = SqlSugar.DbType.MySql,
+                DbType = SqlSugar.DbType.SqlServer,
                 ConnectionString = configuration.GetConnectionString(dbName),
                 IsAutoCloseConnection = true,
             },
