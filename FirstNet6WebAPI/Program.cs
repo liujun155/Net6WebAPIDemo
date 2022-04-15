@@ -215,5 +215,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+//自定义异常中间件
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.Run();
