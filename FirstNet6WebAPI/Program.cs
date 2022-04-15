@@ -85,6 +85,20 @@ builder.Services.AddSingleton<IUserServices, UserServices>();
 builder.Services.AddSingleton<IRoleServices, RoleServices>();
 builder.Services.AddSingleton<IUserRoleServices, UserRoleServices>();
 
+//图片上传配置项
+//配置项转强类型对象
+builder.Services.Configure<PictureOptions>(builder.Configuration.GetSection("PictureOptions"));
+//var config = new ConfigurationBuilder()
+//    .AddInMemoryCollection()
+//    .SetBasePath(Directory.GetCurrentDirectory())
+//    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+//    .Build();
+//var service = new ServiceCollection()
+//    .AddOptions()
+//    .Configure<PictureOptions>(config.GetSection("PictureOptions"))
+//    .AddTransient<PictureOptions>()
+//    .BuildServiceProvider();
+
 //身份认证
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

@@ -46,7 +46,7 @@ namespace FirstNet6WebAPI.Controllers
                 token = token,
                 rtoken = Rtoken
             };
-
+            Common.Helper.LogUtil.Info("登录成功");
             return new JsonResult(result);
         }
     }
